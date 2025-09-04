@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.AI.EnemyAI
 {
     public class IdleState : AiState
     {
-        public Transform IdlePosition { get; set; }
+        public Transform IdlePosition;
+
+        public float WatchTime = 2;
+        private float _startLookTime;
 
         public IdleState(EnemyAi enemyAi)
             : base(enemyAi)
@@ -19,7 +23,7 @@ namespace Assets.Scripts.AI.EnemyAI
 
         public override void OnStateEntered(EnemyState previousState)
         {
-            Debug.LogError("Not implemented");
+            _startLookTime = Time.time;
         }
 
         public override void OnStateExited(EnemyState nextState)
@@ -27,9 +31,17 @@ namespace Assets.Scripts.AI.EnemyAI
             Debug.LogError("Not implemented");
         }
 
-        public override void Update(GameObject gameObject, float deltaTime)
+        public void Update()
         {
-            Debug.LogError("Not implemented");
+            float timeSinceStartLook = Time.time - _startLookTime;
+            if(timeSinceStartLook >= WatchTime)
+            {
+                Vector3 scale = gameObject.transform.localScale;
+                scale.x *= -1;
+                gameObject.transform.localScale = scale;
+
+                _startLookTime = Time.time;
+            }
         }
     }
 }

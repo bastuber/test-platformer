@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.AI.EnemyAI
 {
-    public class AiState
+    public class AiState : MonoBehaviour
     {
         // Ai property
         protected EnemyAi EnemyAi;
@@ -25,11 +25,6 @@ namespace Assets.Scripts.AI.EnemyAI
         }
 
         public virtual void OnStateExited(EnemyState nextState)
-        {
-            Debug.LogError("Not implemented");
-        }
-
-        public virtual void Update(GameObject gameObject, float deltaTime)
         {
             Debug.LogError("Not implemented");
         }

@@ -25,10 +25,5 @@ namespace Assets.Scripts.AI.EnemyAI
         {
             Debug.LogError("Not implemented");
         }
-
-        public override void Update(GameObject gameObject, float deltaTime)
-        {
-            Debug.LogError("Not implemented");
-        }
     }
 }

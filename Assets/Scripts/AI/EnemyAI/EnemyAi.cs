@@ -15,19 +15,31 @@ namespace Assets.Scripts.AI.EnemyAI
 
         private void Awake()
         {
-            _idleState = new(this);
-            _patrollingState = new(this);
-            _fightingState = new(this);
+            _idleState = GetComponent<IdleState>();
+            _patrollingState = GetComponent<PatrollingState>();
+            _fightingState = GetComponent<FightingState>();
 
             // Idle by default.
-            CurrentState = _idleState;
+            DisableAllStates();
+            SetState(EnemyState.IDLE);
 
             _detectionArea = transform.Find("DetectionArea");
         }
 
+        private void DisableAllStates()
+        {
+            _idleState.enabled = false;
+            _patrollingState.enabled = false;
+            _fightingState.enabled = false;
+        }
+
         public void SetState(EnemyState newState)
         {
-            CurrentState.OnStateExited(newState);
+            if (CurrentState != null)
+            {
+                CurrentState.OnStateExited(newState);
+                CurrentState.enabled = false;
+            }
 
             Debug.Log($"Changing state of {transform.name} to {newState}.");
 
@@ -46,8 +58,10 @@ namespace Assets.Scripts.AI.EnemyAI
                     Debug.LogError($"SetState for {newState} not implemented!");
                     break;
             }
+            CurrentState.enabled = true;
         }
-            public void OnTouchingPlayer(Collider2D collider)
+
+        public void OnTouchingPlayer(Collider2D collider)
         {
             CurrentState.OnPlayerDetected(collider.gameObject);
         }
