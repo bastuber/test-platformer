@@ -10,16 +10,30 @@ namespace Assets.Scripts.AI.EnemyAI
 {
     public class PatrollingState : AiState
     {
+        public List<Transform> WayPoints;
+
+        public float Speed;
+
+        private float t = 0;
+        private int wayPointIndex = 0;
+        private bool goForward = true;
+
+
+
         public PatrollingState(EnemyAi enemyAi)
            : base(enemyAi)
         {
-
+            goForward = true;
         }
 
+        private void Awake()
+        {
+            goForward = true;
+        }
 
         public override void OnPlayerDetected(GameObject player)
         {
-            EnemyAi.SetState(EnemyState.FIGHTING);
+            //EnemyAi.SetState(EnemyState.FIGHTING);
         }
 
         public override void OnStateEntered(EnemyState previousState)
@@ -30,6 +44,60 @@ namespace Assets.Scripts.AI.EnemyAI
         public override void OnStateExited(EnemyState nextState)
         {
             Debug.LogError("Not implemented");
+        }
+        private void FixedUpdate()
+        {
+            if (WayPoints == null || WayPoints.Count < 2)
+            {
+                Console.WriteLine("Error: Not enough waypoints defined");
+                return;
+            }
+
+            Vector3 startPos = WayPoints[wayPointIndex].position;
+            Vector3 endPos;
+            if (goForward)
+            {
+                endPos = WayPoints[wayPointIndex + 1].position;
+            }
+            else
+            {
+                endPos = WayPoints[wayPointIndex - 1].position;
+            }
+
+            Vector3 direction = (endPos - transform.position).normalized;
+            Vector3 move = direction * Speed * Time.fixedDeltaTime;
+
+            var rigidBody = GetComponent<Rigidbody2D>();
+            rigidBody.linearVelocityX = move.x;
+
+            float distanceToEndPos = (endPos - transform.position).magnitude;
+            if (distanceToEndPos <= 0.5)
+            {
+                if (goForward)
+                {
+                    wayPointIndex++;
+                    if (wayPointIndex == WayPoints.Count - 1)
+                    {
+                        goForward = false;
+                        Flip();
+                    }
+                }
+                else
+                {
+                    wayPointIndex--;
+                    if (wayPointIndex == 0)
+                    {
+                        goForward = true;
+                        Flip();
+                    }
+                }
+            }
+        }
+        private void Flip()
+        {
+            Vector3 scale = gameObject.transform.localScale;
+            scale.x *= -1;
+            gameObject.transform.localScale = scale;
         }
     }
 }

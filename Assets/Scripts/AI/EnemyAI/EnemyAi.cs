@@ -5,7 +5,9 @@ namespace Assets.Scripts.AI.EnemyAI
 {
     public class EnemyAi : MonoBehaviour
     {
-        public AiState CurrentState {  get; private set; }
+        public EnemyState StartingState = EnemyState.IDLE;
+
+        private AiState CurrentState;
 
         private IdleState _idleState;
         private PatrollingState _patrollingState;
@@ -21,7 +23,7 @@ namespace Assets.Scripts.AI.EnemyAI
 
             // Idle by default.
             DisableAllStates();
-            SetState(EnemyState.IDLE);
+            SetState(StartingState);
 
             _detectionArea = transform.Find("DetectionArea");
         }
