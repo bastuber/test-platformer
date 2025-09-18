@@ -82,5 +82,22 @@ namespace Assets.Scripts.AI.EnemyAI
         {
             return _detectedPlayer;
         }
+
+        public void LookAt(Vector3 lookPos)
+        {
+            Vector3 lookDirection = lookPos - transform.position;
+            Vector3 newScale = transform.localScale;
+            if(lookDirection.x >= 0)
+            {
+                newScale.x = Mathf.Abs(transform.localScale.x);
+            }
+            else
+            {
+                newScale.x = Mathf.Abs(transform.localScale.x);
+                newScale.x *= -1;
+            }
+
+            gameObject.transform.localScale = newScale;
+        }
     }
 }

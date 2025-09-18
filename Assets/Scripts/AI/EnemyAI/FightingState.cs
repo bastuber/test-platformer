@@ -43,6 +43,8 @@ namespace Assets.Scripts.AI.EnemyAI
 
             var rigidBody = GetComponent<Rigidbody2D>();
             rigidBody.linearVelocityX = move.x;
+
+            EnemyAiBehaviour.LookAt(player.position);
         }
 
     }

@@ -71,7 +71,6 @@ namespace Assets.Scripts.AI.EnemyAI
                     if (wayPointIndex == WayPoints.Count - 1)
                     {
                         goForward = false;
-                        Flip();
                     }
                 }
                 else
@@ -80,16 +79,11 @@ namespace Assets.Scripts.AI.EnemyAI
                     if (wayPointIndex == 0)
                     {
                         goForward = true;
-                        Flip();
                     }
                 }
             }
-        }
-        private void Flip()
-        {
-            Vector3 scale = gameObject.transform.localScale;
-            scale.x *= -1;
-            gameObject.transform.localScale = scale;
+
+            EnemyAiBehaviour.LookAt(endPos);
         }
     }
 }
