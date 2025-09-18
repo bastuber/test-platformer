@@ -18,22 +18,14 @@ namespace Assets.Scripts.AI.EnemyAI
         private int wayPointIndex = 0;
         private bool goForward = true;
 
-
-
-        public PatrollingState(EnemyAi enemyAi)
-           : base(enemyAi)
-        {
-            goForward = true;
-        }
-
-        private void Awake()
+        protected override void InitializeState()
         {
             goForward = true;
         }
 
         public override void OnPlayerDetected(GameObject player)
         {
-            //EnemyAi.SetState(EnemyState.FIGHTING);
+            EnemyAiBehaviour.SetState(EnemyState.FIGHTING);
         }
 
         public override void OnStateEntered(EnemyState previousState)

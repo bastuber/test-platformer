@@ -10,20 +10,18 @@ namespace Assets.Scripts.AI.EnemyAI
         public float WatchTime = 2;
         private float _startLookTime;
 
-        public IdleState(EnemyAi enemyAi)
-            : base(enemyAi)
-        {
-
-        }
+        public float SearchTime = 6;
+        private float _startSearchTime;
 
         public override void OnPlayerDetected(GameObject player)
         {
-            EnemyAi.SetState(EnemyState.FIGHTING);
+            EnemyAiBehaviour.SetState(EnemyState.FIGHTING);
         }
 
         public override void OnStateEntered(EnemyState previousState)
         {
             _startLookTime = Time.time;
+            _startSearchTime = Time.time;
         }
 
         public override void OnStateExited(EnemyState nextState)
@@ -33,14 +31,30 @@ namespace Assets.Scripts.AI.EnemyAI
 
         public void Update()
         {
+            LookAround();
+
+            PatrolWhenSearchTimeExpired();
+        }
+
+        private void LookAround()
+        {
             float timeSinceStartLook = Time.time - _startLookTime;
-            if(timeSinceStartLook >= WatchTime)
+            if (timeSinceStartLook >= WatchTime)
             {
                 Vector3 scale = gameObject.transform.localScale;
                 scale.x *= -1;
                 gameObject.transform.localScale = scale;
 
                 _startLookTime = Time.time;
+            }
+        }
+
+        private void PatrolWhenSearchTimeExpired()
+        {
+            float timeSinceStartSearch = Time.time - _startSearchTime;
+            if (timeSinceStartSearch >= SearchTime)
+            {
+                EnemyAiBehaviour.SetState(EnemyState.PATROLLING);
             }
         }
     }

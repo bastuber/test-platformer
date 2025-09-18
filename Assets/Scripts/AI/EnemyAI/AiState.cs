@@ -6,15 +6,24 @@ namespace Assets.Scripts.AI.EnemyAI
     public class AiState : MonoBehaviour
     {
         // Ai property
-        protected EnemyAi EnemyAi;
-        
-        //Constructor
-        public AiState(EnemyAi enemyAi)
+        protected EnemyAi EnemyAiBehaviour;
+
+        private void Awake()
         {
-            EnemyAi = enemyAi;
+            EnemyAiBehaviour = GetComponent<EnemyAi>();
+        }
+
+        protected virtual void InitializeState()
+        {
+
         }
 
         public virtual void OnPlayerDetected(GameObject player)
+        {
+            Debug.LogError("Not implemented");
+        }
+
+        public virtual void OnPlayerLost(GameObject player)
         {
             Debug.LogError("Not implemented");
         }

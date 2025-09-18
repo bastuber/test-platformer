@@ -15,6 +15,8 @@ namespace Assets.Scripts.AI.EnemyAI
 
         private Transform _detectionArea;
 
+        private Transform _detectedPlayer = null;
+
         private void Awake()
         {
             _idleState = GetComponent<IdleState>();
@@ -61,11 +63,24 @@ namespace Assets.Scripts.AI.EnemyAI
                     break;
             }
             CurrentState.enabled = true;
+            CurrentState.OnStateEntered(0);
         }
 
         public void OnTouchingPlayer(Collider2D collider)
         {
+            _detectedPlayer = collider.transform;
             CurrentState.OnPlayerDetected(collider.gameObject);
+        }
+
+        public void OnPlayerOutOfView(Collider2D collider)
+        {
+            _detectedPlayer = null;
+            CurrentState.OnPlayerLost(collider.gameObject);
+        }
+
+        public Transform GetDetectedPlayer()
+        {
+            return _detectedPlayer;
         }
     }
 }
